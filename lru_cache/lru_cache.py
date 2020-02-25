@@ -10,9 +10,10 @@
 # another pre-existing entry needs to be evicted from the cache.
 # Because the cache is using a least-recently used strategy,
 # the oldest entry (the one that was added/updated the longest time ago) is removed to make space for the new entry.
+import collections
 
 
-from doubly_linked_list import DoublyLinkedList
+import time
 
 
 class LRUCache:
@@ -28,10 +29,8 @@ class LRUCache:
     #The doubly linked list makes it easy to move entries to the head O(1)
     #The doubly linked list also makes it easy to remove them from the tail/end O(1)
     def __init__(self, limit=10):
-        self.limit = limit
-        self.dictionary = dict()
-        self.order = DoublyLinkedList()
-        self.size = 0
+        self.capacity = limit
+        self.cache = collections.OrderedDict()
 
     #
     # We'll also need a get operation that fetches a value given a key. ' \
@@ -46,12 +45,14 @@ class LRUCache:
     key-value pair doesn't exist in the cache.
     """
     def get(self, key):
-        if key in self.dictionary[key]:
-            node = self.dictionary[key]
-            self.order.move_to_end(node)
-            return node.value[1]
-        else:
+        try:
+            value = self.cache.pop(key)
+            self.cache[key] = value
+            return value
+        except KeyError:
             return None
+
+
 
     #
     # So what operations will we need on our cache?
@@ -74,24 +75,12 @@ class LRUCache:
     """
 
     def set(self, key, value):
-        if key in self.dictionary:
-            node = self.dictionary[key]
-            node.value = (key, value)
-            self.dictionary.move_to_end(node)
-            return
-        if self.size == self.limit:
-            # remove it from oldest
-            del self.dictionary.head.value[0]
-            del self.order.head.value[0]
-            # remove it from DoublyLinkedList
-            self.dictionary.remove_from_head()
-            # add new thing
-            self.order.add_to_tail((key, value))
-            self.dictionary[key] = value
-
-        self.size += 1
-        self.order.add_to_tail((key, value))
-        self.dictionary[key] = self.order.tail
+        try:
+            self.cache.pop(key)
+        except KeyError:
+            if len(self.cache) >= self.capacity:
+                self.cache.popitem(last=False)
+        self.cache[key] = value
 
         # Note that the only way for entries to be removed from the cache is when one needs
     # to be evicted to make room for a new one.
@@ -113,3 +102,12 @@ class LRUCache:
     # don't have any way of remembering the order in which key-value pairs are ' \
     # added. But we definitely need something to remember the order in which pairs are added.
     # Can you think of some ways to get around this constraint?
+
+    def memoization(num):
+        print('computing....')
+        time.sleep(2)
+        result = num * num
+        return result
+
+
+# big O(1)
