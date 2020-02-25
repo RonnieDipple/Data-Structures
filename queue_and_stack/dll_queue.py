@@ -24,7 +24,7 @@ class Queue:
 
     # dequeue() : Removes and returns the first element from the queue.
     def dequeue(self):
-        # self.storage.remove_from_head(self.value) <- this is wrong no need to add the value only to take it away
+        # self.dictionary.remove_from_head(self.value) <- this is wrong no need to add the value only to take it away
         # as the value is already in head
         if self.size > 0:
             self.size -= 1
