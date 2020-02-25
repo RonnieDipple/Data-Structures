@@ -22,6 +22,7 @@ class Stack:
     def pop(self):
         pass
 
+
     # len returns the number of items in the queue.
     def len(self):
-        pass
+        return self.size

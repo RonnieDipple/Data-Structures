@@ -180,15 +180,21 @@ class DoublyLinkedList:
         # return var, return max
 
         current = self.head
-
+        #Edge case
         if(self.head == None):
             print("List is empty")
             return 0
         else:
             max = self.head.value
 
+            #The loop
             while(current!= None):
+                #If current value is above max aka self head move on otherwise max = current value
                 if(current.value > max):
                     max = current.value
                 current = current.next
         return max
+
+
+
+
