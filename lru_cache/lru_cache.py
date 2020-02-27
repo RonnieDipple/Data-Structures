@@ -29,7 +29,7 @@ class LRUCache:
     #The doubly linked list makes it easy to move entries to the head O(1)
     #The doubly linked list also makes it easy to remove them from the tail/end O(1)
     def __init__(self, limit=10):
-        self.capacity = limit
+        self.limit = limit
         self.cache = collections.OrderedDict()
 
     #
@@ -59,14 +59,14 @@ class LRUCache:
     # We'll certainly need some sort of set operation to add key-value pairs to the cache.' \
     # Newly-set pairs will get moved up the priority order such that every other pair in the
     # cache is now one spot lower in the priority order that the cache maintains.
-    # The lowest-priority pair will get removed from the cache if the cache is already at its maximal capacity.
+    # The lowest-priority pair will get removed from the cache if the cache is already at its maximal limit.
     # Additionally, in the case that the key already exists in the cache,
     # we simply want to overwrite the old value associated with the key with the newly-specified value.
     #
     """
     Adds the given key-value pair to the cache. The newly-
     added pair should be considered the most-recently used
-    entry in the cache. If the cache is already at max capacity
+    entry in the cache. If the cache is already at max limit
     before this entry is added, then the oldest entry in the
     cache needs to be removed to make room. Additionally, in the
     case that the key already exists in the cache, we simply
@@ -78,7 +78,7 @@ class LRUCache:
         try:
             self.cache.pop(key)
         except KeyError:
-            if len(self.cache) >= self.capacity:
+            if len(self.cache) >= self.limit:
                 self.cache.popitem(last=False)
         self.cache[key] = value
 
@@ -111,3 +111,4 @@ class LRUCache:
 
 
 # big O(1)
+# https://www.kunxi.org/2014/05/lru-cache-in-python/
